@@ -2,11 +2,11 @@
 Informe 2 correspondiente a la materia Inteligencia Artificial (SI3003) de la Universidad EAFIT
 
 ## 1. Descripción del dataset
-- **Fuente**: este dataset proporciona información acerca de alguna aerolíneas y las calificaciones que los usuarios le dan a varios aspectos del viaje (como la comodidad de las sillas, el servicio, el entretenimiento, etc.). El dataset fue sacado de la plataforma Kaggle y se puede acceder a través del siguiente [enlace](https://www.kaggle.com/datasets/efehandanisman/skytrax-airline-reviews?resource=download)
+- **Fuente**: este dataset proporciona información acerca de algunas aerolíneas y las calificaciones que los usuarios le dan a varios aspectos del viaje (como la comodidad de las sillas, el servicio, el entretenimiento, etc.). El dataset fue sacado de la plataforma Kaggle y se puede acceder a través del siguiente [enlace](https://www.kaggle.com/datasets/efehandanisman/skytrax-airline-reviews?resource=download)
 
-- **Número de registros**: al cargar inicialmente la base de datos a un dataframe de pandas se observa que el dataset tiene 17 columnas y 131895 filas. SIn embargo, mirando por encima el archivo csv, vimos que los autores ponían datos en una fila y la siguiente la dejaban vacía (se intercalaba una fila de datos y una fila vacía). Entonces, después de eliminar estas filas vacías, quedamos con un dataset de 17 columnas y 65947 filas.
+- **Número de registros**: al cargar inicialmente la base de datos a un dataframe de pandas se observa que el dataset tiene 17 columnas y 131895 filas. Sin embargo, mirando por encima el archivo csv, vimos que los autores ponían datos en una fila y la siguiente la dejaban vacía (se intercalaba una fila de datos y una fila vacía). Entonces, después de eliminar estas filas vacías, quedamos con un dataset de 17 columnas y 65947 filas.
 
-- **Variables**: a continuación se decriben las variables que contiene el dataset:
+- **Variables**: a continuación se describen las variables que contiene el dataset:
   1. *airline* (string): nombre de la aerolínea.
   2. *overall* (float): calificación general del viaje en una escala de 1 a 10.
   3. *author* (string): autor del viaje.
@@ -29,13 +29,13 @@ Informe 2 correspondiente a la materia Inteligencia Artificial (SI3003) de la Un
 
 ## 2. Preprocesamiento
 Para el preprocesamiento del dataset se realizaron los siguientes pasos:
-**1.** Se creó un dataframe de pandas con el csv del dataset.
-**2.** Se eliminaron las filas vacías usando el método `dropna()`.
-**3.** Se eliminan las columnas que no aportarán mucho valor al modelo. En este caso eliminamos las columnas de: author, review_date, customer_review, route y date_flown. Quedamos entonces con 12 variables de interés.
-**4.** La variable aircraft no está estandarizada (hay texto con la primera letra en mayúscula y otros todo en minúscula, el mismo nombre de aeronave escrito de formas diferentes, texto que dice que se desconoce, entre muchos otros problemas). Se usaron expresiones regulares para tratar de dar homogeneidad a esta variable. Adicionalmente, los datos que aparecieran menos de 50 veces se agruparon en una categoría de "other", para facilitar el one-hot encoding más adelante.
-**5.** La variable objetivo (label) es 'recommended', pero esta variable tenía datos de 'yes' y 'no', por lo que se realiza una transformación de esta columna para convertirlo en numérico (0: no, 1: yes).
-**6.** Se realiza la división del dataset en los 3 conjuntos: entrenamiento, validación y prueba, tratando de mantener la proporción 60/20/20.
-**7.** Se crean los pipelines para imputar datos faltantes, realizar la codificación de las variables categóricas y escalar las variables numéricas:
+1. Se creó un dataframe de pandas con el csv del dataset.
+2. Se eliminaron las filas vacías usando el método `dropna()`.
+3. Se eliminan las columnas que no aportarán mucho valor al modelo. En este caso eliminamos las columnas de: author, review_date, customer_review, route y date_flown. Quedamos entonces con 12 variables de interés.
+4. La variable aircraft no está estandarizada (hay texto con la primera letra en mayúscula y otros todo en minúscula, el mismo nombre de aeronave escrito de formas diferentes, texto que dice que se desconoce, entre muchos otros problemas). Se usaron expresiones regulares para tratar de dar homogeneidad a esta variable. Adicionalmente, los datos que aparecieran menos de 50 veces se agruparon en una categoría de "other", para facilitar el one-hot encoding más adelante.
+5. La variable objetivo (label) es 'recommended', pero esta variable tenía datos de 'yes' y 'no', por lo que se realiza una transformación de esta columna para convertirlo en numérico (0: no, 1: yes).
+6. Se realiza la división del dataset en los 3 conjuntos: entrenamiento, validación y prueba, tratando de mantener la proporción 60/20/20.
+7. Se crean los pipelines para imputar datos faltantes, realizar la codificación de las variables categóricas y escalar las variables numéricas:
     - Imputación de datos faltantes: para las variables cuantitativas se imputaron los datos faltantes con la media, mientras que para las variables categóricas se utilizó la moda.
     - Codificación de las variables categóricas: para las variables nominales (airline, aircraft y traveller_type) usamos one-hot encoding. Para la variable ordinal (cabin), usamos ordinal encoding.
     - Escalado de las variables cuantitativas: se realiza porque no todas están en la misma escala (por ejemplo overall está en escala de 1 a 10 mientras que las otras calificaciones van de 1 a 5)
@@ -43,15 +43,15 @@ Para el preprocesamiento del dataset se realizaron los siguientes pasos:
 **Nota**: la aplicación de los pipelines se realiza después de dividir el dataset en los 3 conjuntos y se aplica el pipeline de manera independiente al conjunto de entrenamiento, validación y prueba para evitar data leakage
 
 ## 3. Entrenamiento de los modelos
-**1. Modelo 1**:
+1. **Modelo 1**:
 
-**2. Modelo 2 - Red Neuronal**:
+2. **Modelo 2 - Red Neuronal**:
 
-**3. Modelo 3 - XGBoost**: el tercer modelo utilizado fue el XGBoost, en el cual se entrenan varios árboles de decisión pero cada árbol aprende del anterior y trata de corregir los errores de los árboles pasados. Suele ser más preciso que un Random Forest. En este caso usamos la librería xgboost para usar el modelo. Los hiperparámetros fueron los siguientes:
+3. **Modelo 3 - XGBoost**: el tercer modelo utilizado fue el XGBoost, en el cual se entrenan varios árboles de decisión pero cada árbol aprende del anterior y trata de corregir los errores de los árboles pasados. Suele ser más preciso que un Random Forest. En este caso usamos la librería xgboost para usar el modelo. Los hiperparámetros fueron los siguientes:
   - *n_estimators*: es el número de árboles que vamos a usar. En este caso usamos 100.
-  - *learning_rate*: es la tasa de aprendizaje. Es lo que contribuye cada árbol al resultado final y esto determina qué tan rapido aprende el modelo. Entre más pequeños sea este valor, significa que cada árbol corregirá menos errores del árbol anterior. Los valores usuales son entre 0.05 y 0.3. En nuestro caso usamos 0.1.
+  - *learning_rate*: es la tasa de aprendizaje. Es lo que contribuye cada árbol al resultado final y esto determina qué tan rápido aprende el modelo. Entre más pequeños sea este valor, significa que cada árbol corregirá menos errores del árbol anterior. Los valores usuales son entre 0.05 y 0.3. En nuestro caso usamos 0.1.
   - *max_depth*: es la profundidad máxima de cada árbol. En nuestro modelo está configurada en una profundidad máxima de 6.
-  - *subsample*: es la cantidad de datos del set de entrenamiento que va a usar el modelo para entrenar cada árbol. EN nuestro caso es de 0.8, es decir que para cada árbol el modelo toma al azar el 80% de los datos del set de entrenamiento.
+  - *subsample*: es la cantidad de datos del set de entrenamiento que va a usar el modelo para entrenar cada árbol. En nuestro caso es de 0.8, es decir que para cada árbol el modelo toma al azar el 80% de los datos del set de entrenamiento.
   - *colsample_bytree*: es el porcentaje de columnas (atributos) que se usan para construir cada árbol (un concepto similar a subsample pero para las columnas). En este caso también se estableció en 0.8.
   - *random_state*: la semilla para generar números aleatorios y que el resultado sea reproducible.
   - *use_label_encoder*: es un parámetro que se usaba en versiones antiguas de XGBoost para manejar la codificación de las etiquetas (variables target). Por defecto debe ser False porque uno debe tener el control de la codificación de las etiquetas.
@@ -59,18 +59,19 @@ Para el preprocesamiento del dataset se realizaron los siguientes pasos:
 
 ## 4. Evaluación de resultados:
 ### 4.1 Métricas de rendimiento
-**1. Modelo 1**:
+1. **Modelo 1**:
 
-**2. Modelo 2 - Red Neuronal**:
+2. **Modelo 2 - Red Neuronal**:
 
-**3. Modelo 3 - XGBoost**: Usamos como métrica de rendimiento el accuracy por tratarse de un probelma de clasificación. Entre más cercano esté el accuracy al 100% significa que la clasificación es mejor. Nuestro modelo XGBoost tuvo un accuracy de 95.9% durante la validación y un accuracy de 96% con el conjunto de prueba, lo que indica un buen desempeño del modelo. Basados en este resultado de precisión podemos decir que el modelo realiza una clasificación adecuada y permite predecir si se recomienda o no una aerolínea.
+3. **Modelo 3 - XGBoost**: Usamos como métrica de rendimiento el accuracy por tratarse de un problema de clasificación. Entre más cercano esté el accuracy al 100% significa que la clasificación es mejor. Nuestro modelo XGBoost tuvo un accuracy de 95.9% durante la validación y un accuracy de 96% con el conjunto de prueba, lo que indica un buen desempeño del modelo. Basados en este resultado de precisión podemos decir que el modelo realiza una clasificación adecuada y permite predecir si se recomienda o no una aerolínea.
 
-### 4.2 Curvas y Visualizaciónes
-**1. Modelo 1**:
+### 4.2 Curvas y Visualizaciones
+1. **Modelo 1**:
 
-**2. Modelo 2 - Red Neuronal**:
+2. **Modelo 2 - Red Neuronal**:
 
-**3. Modelo 3 - XGBoost**:
+3. **Modelo 3 - XGBoost**:
+
   **a. Matriz de confusión**:
   ![Matriz de Confusión](matriz_confusion_xgboost.png)
   Se puede observar que el modelo predice muy bien los valores verdaderos. La cantidad de falsos positivos y falsos negativos es muy pequeño en proporción a la cantidad de resultados acertados.
