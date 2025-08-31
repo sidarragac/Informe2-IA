@@ -11,7 +11,7 @@ def graficar_resultados(y_test, y_pred):
     ConfusionMatrixDisplay.from_predictions(y_test, y_pred, cmap="Blues")
     plt.title("Matriz de confusión")
     plt.grid(False)
-    plt.savefig("../matriz_confusion_xgboost.png", dpi=300, bbox_inches="tight")
+    plt.savefig("../images/matriz_confusion_xgboost.png", dpi=300, bbox_inches="tight")
 
 def main():
     # Cargar datos preprocesados
