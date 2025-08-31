@@ -31,6 +31,10 @@ def preprocesar_dataset():
     # Conversión de etiqueta `recommended` a binaria
     data_elegida['recommended'] = data_elegida['recommended'].map({'yes': 1, 'no': 0})
 
+    # Imputar valores faltantes en la etiqueta con la moda
+    moda_recommended = data_elegida['recommended'].mode()[0]
+    data_elegida['recommended'] = data_elegida['recommended'].fillna(moda_recommended)
+
     # Separar X e y
     X = data_elegida.drop(columns=['recommended'])
     y = data_elegida['recommended']

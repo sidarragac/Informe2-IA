@@ -41,3 +41,36 @@ Para el preprocesamiento del dataset se realizaron los siguientes pasos:
   - Escalado de las variables cuantitativas: se realiza porque no todas están en la misma escala (por ejemplo overall está en escala de 1 a 10 mientras que las otras calificaciones van de 1 a 5)
 
 **Nota**: la aplicación de los pipelines se realiza después de dividir el dataset en los 3 conjuntos y se aplica el pipeline de manera independiente al conjunto de entrenamiento, validación y prueba para evitar data leakage
+
+## 3. Entrenamiento de los modelos
+1. **Modelo 1**:
+
+2. **Modelo 2 - Red Neuronal**:
+
+3. **Modelo 3 - XGBoost**: el tercer modelo utilizado fue el XGBoost, en el cual se entrenan varios árboles de decisión pero cada árbol aprende del anterior y trata de corregir los errores de los árboles pasados. Suele ser más preciso que un Random Forest. En este caso usamos la librería xgboost para usar el modelo. Los hiperparámetros fueron los siguientes:
+  - *n_estimators*: es el número de árboles que vamos a usar. En este caso usamos 100.
+  - *learning_rate*: es la tasa de aprendizaje. Es lo que contribuye cada árbol al resultado final y esto determina qué tan rapido aprende el modelo. Entre más pequeños sea este valor, significa que cada árbol corregirá menos errores del árbol anterior. Los valores usuales son entre 0.05 y 0.3. En nuestro caso usamos 0.1.
+  - *max_depth*: es la profundidad máxima de cada árbol. En nuestro modelo está configurada en una profundidad máxima de 6.
+  - *subsample*: es la cantidad de datos del set de entrenamiento que va a usar el modelo para entrenar cada árbol. EN nuestro caso es de 0.8, es decir que para cada árbol el modelo toma al azar el 80% de los datos del set de entrenamiento.
+  - *colsample_bytree*: es el porcentaje de columnas (atributos) que se usan para construir cada árbol (un concepto similar a subsample pero para las columnas). En este caso también se estableció en 0.8.
+  - *random_state*: la semilla para generar números aleatorios y que el resultado sea reproducible.
+  - *use_label_encoder*: es un parámetro que se usaba en versiones antiguas de XGBoost para manejar la codificación de las etiquetas (variables target). Por defecto debe ser False porque uno debe tener el control de la codificación de las etiquetas.
+  - *eval_metric*: es la métrica que usa el modelo para evaluar su desempeño durante el entrenamiento. En este caso se usa 'logloss' que significa logarithmic loss y es una métrica utilizada para ver qué tan bien predice el modelo las probabilidades en un problema de clasificación.
+
+## 4. Evaluación de resultados:
+### 4.1 Métricas de rendimiento
+1. **Modelo 1**:
+
+2. **Modelo 2 - Red Neuronal**:
+
+3. **Modelo 3 - XGBoost**: Usamos como métrica de rendimiento el accuracy por tratarse de un probelma de clasificación. Entre más cercano esté el accuracy al 100% significa que la clasificación es mejor. Nuestro modelo XGBoost tuvo un accuracy de 95.9% durante la validación y un accuracy de 96% con el conjunto de prueba, lo que indica un buen desempeño del modelo. Basados en este resultado de precisión podemos decir que el modelo realiza una clasificación adecuada y permite predecir si se recomienda o no una aerolínea.
+
+## 4.2 Curvas y Visualizaciónes
+1. **Modelo 1**:
+
+2. **Modelo 2 - Red Neuronal**:
+
+3. **Modelo 3 - XGBoost**:
+  - Matriz de confusión:
+  ![Matriz de Confusión](matriz_confusion_xgboost.png)
+  Se puede observar que el modelo predice muy bien los valores verdaderos. La cantidad de falsos positivos y falsos negativos es muy pequeño en proporción a la cantidad de resultados acertados.
