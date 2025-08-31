@@ -48,14 +48,14 @@ Para el preprocesamiento del dataset se realizaron los siguientes pasos:
 2. **Modelo 2 - Red Neuronal**:
 
 3. **Modelo 3 - XGBoost**: el tercer modelo utilizado fue el XGBoost, en el cual se entrenan varios árboles de decisión pero cada árbol aprende del anterior y trata de corregir los errores de los árboles pasados. Suele ser más preciso que un Random Forest. En este caso usamos la librería xgboost para usar el modelo. Los hiperparámetros fueron los siguientes:
-  - *n_estimators*: es el número de árboles que vamos a usar. En este caso usamos 100.
-  - *learning_rate*: es la tasa de aprendizaje. Es lo que contribuye cada árbol al resultado final y esto determina qué tan rápido aprende el modelo. Entre más pequeños sea este valor, significa que cada árbol corregirá menos errores del árbol anterior. Los valores usuales son entre 0.05 y 0.3. En nuestro caso usamos 0.1.
-  - *max_depth*: es la profundidad máxima de cada árbol. En nuestro modelo está configurada en una profundidad máxima de 6.
-  - *subsample*: es la cantidad de datos del set de entrenamiento que va a usar el modelo para entrenar cada árbol. En nuestro caso es de 0.8, es decir que para cada árbol el modelo toma al azar el 80% de los datos del set de entrenamiento.
-  - *colsample_bytree*: es el porcentaje de columnas (atributos) que se usan para construir cada árbol (un concepto similar a subsample pero para las columnas). En este caso también se estableció en 0.8.
-  - *random_state*: la semilla para generar números aleatorios y que el resultado sea reproducible.
-  - *use_label_encoder*: es un parámetro que se usaba en versiones antiguas de XGBoost para manejar la codificación de las etiquetas (variables target). Por defecto debe ser False porque uno debe tener el control de la codificación de las etiquetas.
-  - *eval_metric*: es la métrica que usa el modelo para evaluar su desempeño durante el entrenamiento. En este caso se usa 'logloss' que significa logarithmic loss y es una métrica utilizada para ver qué tan bien predice el modelo las probabilidades en un problema de clasificación.
+    - *n_estimators*: es el número de árboles que vamos a usar. En este caso usamos 100.
+    - *learning_rate*: es la tasa de aprendizaje. Es lo que contribuye cada árbol al resultado final y esto determina qué tan rápido aprende el modelo. Entre más pequeños sea este valor, significa que cada árbol corregirá menos errores del árbol anterior. Los valores usuales son entre 0.05 y 0.3. En nuestro caso usamos 0.1.
+    - *max_depth*: es la profundidad máxima de cada árbol. En nuestro modelo está configurada en una profundidad máxima de 6.
+    - *subsample*: es la cantidad de datos del set de entrenamiento que va a usar el modelo para entrenar cada árbol. En nuestro caso es de 0.8, es decir que para cada árbol el modelo toma al azar el 80% de los datos del set de entrenamiento.
+    - *colsample_bytree*: es el porcentaje de columnas (atributos) que se usan para construir cada árbol (un concepto similar a subsample pero para las columnas). En este caso también se estableció en 0.8.
+    - *random_state*: la semilla para generar números aleatorios y que el resultado sea reproducible.
+    - *use_label_encoder*: es un parámetro que se usaba en versiones antiguas de XGBoost para manejar la codificación de las etiquetas (variables target). Por defecto debe ser False porque uno debe tener el control de la codificación de las etiquetas.
+    - *eval_metric*: es la métrica que usa el modelo para evaluar su desempeño durante el entrenamiento. En este caso se usa 'logloss' que significa logarithmic loss y es una métrica utilizada para ver qué tan bien predice el modelo las probabilidades en un problema de clasificación.
 
 ## 4. Evaluación de resultados:
 ### 4.1 Métricas de rendimiento
