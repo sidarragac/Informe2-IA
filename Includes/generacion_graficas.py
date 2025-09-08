@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import ConfusionMatrixDisplay
 
-IMAGES_DIR = "../images/"
+IMAGES_DIR = "../Images/"
 
 def graficar_resultados(y_test, y_pred, method_name):
     # Matriz de confusión
