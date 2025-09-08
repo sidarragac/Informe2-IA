@@ -9,7 +9,7 @@ def graficar_resultados(y_test, y_pred, method_name):
     ConfusionMatrixDisplay.from_predictions(y_test, y_pred, cmap="Blues")
     plt.title("Matriz de confusión")
     plt.grid(False)
-    plt.savefig(f"{IMAGES_DIR}/matriz_confusion_{method_name}.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"{IMAGES_DIR}matriz_confusion_{method_name}.png", dpi=300, bbox_inches="tight")
 
 def grafica_correlacion(df, columnas_numericas):
     corr = df[columnas_numericas].corr()
