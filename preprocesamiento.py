@@ -1,11 +1,28 @@
 import pandas as pd
 import re
 import os
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder, StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
+
+def grafica_correlacion(df, columnas_numericas):
+    corr = df[columnas_numericas].corr()
+    plt.figure(figsize=(8,6))
+    sns.heatmap(corr, annot=True, cmap="coolwarm", center=0)
+    plt.title("Matriz de correlación (variables numéricas)")
+    plt.show()
+
+def boxplots_vs_target(df, columnas_numericas):
+    for col in columnas_numericas:
+        plt.figure(figsize=(6,4))
+        sns.boxplot(x="recommended", y=col, data=df)
+        plt.title(f"{col} vs Recommended")
+        plt.show()
+
 
 def preprocesar_dataset():
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -55,6 +72,9 @@ def preprocesar_dataset():
     X_train_transformed = preprocessor.fit_transform(X_train)
     X_val_transformed = preprocessor.transform(X_val)
     X_test_transformed = preprocessor.transform(X_test)
+
+    grafica_correlacion(raw_data, columnas_numericas)
+    boxplots_vs_target(raw_data, columnas_numericas)
 
     return X_train_transformed, X_val_transformed, X_test_transformed, y_train, y_val, y_test
 
