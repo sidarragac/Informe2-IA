@@ -1,14 +1,18 @@
 import pandas as pd
 import re
 import os
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder, StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
+from Includes.generacion_graficas import grafica_correlacion, boxplots_vs_target
+
 
 def preprocesar_dataset():
-    base_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     ruta_csv = os.path.join(base_dir, "database.csv")
     raw_data = pd.read_csv(ruta_csv, low_memory=False)
 
@@ -55,6 +59,9 @@ def preprocesar_dataset():
     X_train_transformed = preprocessor.fit_transform(X_train)
     X_val_transformed = preprocessor.transform(X_val)
     X_test_transformed = preprocessor.transform(X_test)
+
+    # grafica_correlacion(raw_data, columnas_numericas)
+    # boxplots_vs_target(raw_data, columnas_numericas)
 
     return X_train_transformed, X_val_transformed, X_test_transformed, y_train, y_val, y_test
 

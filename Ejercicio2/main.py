@@ -8,7 +8,7 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from preprocesamiento import preprocesar_dataset
+from Includes.preprocesamiento import preprocesar_dataset
 
 def main():
     # 1. Cargar y preprocesar datos
