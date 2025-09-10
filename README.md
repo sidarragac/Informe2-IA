@@ -73,5 +73,5 @@ Para el preprocesamiento del dataset se realizaron los siguientes pasos:
 3. **Modelo 3 - XGBoost**:
 
   **a. Matriz de confusión**:
-  ![Matriz de Confusión](images/matriz_confusion_xgboost.png)
+  ![Matriz de Confusión](Images/matriz_confusion_xgboost.png)
   Se puede observar que el modelo predice muy bien los valores verdaderos. La cantidad de falsos positivos y falsos negativos es muy pequeño en proporción a la cantidad de resultados acertados.

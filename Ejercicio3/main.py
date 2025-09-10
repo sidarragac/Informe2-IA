@@ -1,17 +1,12 @@
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from preprocesamiento import preprocesar_dataset
-from xgboost import XGBClassifier
-from sklearn.metrics import ConfusionMatrixDisplay, accuracy_score
 import matplotlib.pyplot as plt
+from xgboost import XGBClassifier
+from sklearn.metrics import accuracy_score
 
-def graficar_resultados(y_test, y_pred):
-    # Matriz de confusión
-    ConfusionMatrixDisplay.from_predictions(y_test, y_pred, cmap="Blues")
-    plt.title("Matriz de confusión")
-    plt.grid(False)
-    plt.savefig("../images/matriz_confusion_xgboost.png", dpi=300, bbox_inches="tight")
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from Includes.preprocesamiento import preprocesar_dataset
+from Includes.generacion_graficas import graficar_resultados
 
 def main():
     # Cargar datos preprocesados
@@ -43,7 +38,7 @@ def main():
     print("Accuracy:", accuracy_score(y_test, y_test_pred))
 
     # Graficar resultados
-    graficar_resultados(y_test, y_test_pred)
+    graficar_resultados(y_test, y_test_pred, "xgboost")
 
 if __name__ == "__main__":
     main()
