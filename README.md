@@ -42,6 +42,28 @@ Para el preprocesamiento del dataset se realizaron los siguientes pasos:
 
 **Nota**: la aplicación de los pipelines se realiza después de dividir el dataset en los 3 conjuntos y se aplica el pipeline de manera independiente al conjunto de entrenamiento, validación y prueba para evitar data leakage
 
+Durante el preprocesamiento se logra observar lo siguiente:
+-	El tamaño original de la base de datos es de 17 columnas y 131895 filas. Luego de eliminar las filas vacías quedamos con 65947 filas.
+- Obtenemos la siguiente información del método info():
+<img width="539" height="656" alt="image" src="https://github.com/user-attachments/assets/77826e90-6e72-449f-aadd-8ecfe78921d0" />
+
+  Como hay 65947 filas en total, vemos el conteo de filas no nulas de cada variable. Aquellas que tienen menos de 65947 significa que tienen datos faltantes y fueron los que se imputaron. Adicionalmente, podemos observar que hay 7 variables de tipo float y el resto son strings.
+- En las estadísticas descriptivas con el método describe() observamos lo siguiente:
+<img width="3285" height="576" alt="image" src="https://github.com/user-attachments/assets/05584c54-1071-4356-bdb8-6b6f31d8d8ec" />
+
+  Aquí llama la atención algunos datos, como por ejemplo: hay 81 aerolíneas, 4 tipos de viajeros, 4 tipos de cabinas, lo más común es viajar en clase económica, es más común NO recomendar una aerolínea que recomendarla, la calificación total promedio fue de 5.14 y el promedio de calificaciones individuales era muy cercano a 3 para todas estas variables.
+- Al revisar los datos que habían en la variable aircraft, observamos que no estaba estandarizado y que había valores que no aportaban nada o que no tenían sentido (por ejmplo, personas que decían "I don't know"). Entonces con el uso de expresiones regulares se hizo una transformación de los datos de esta variable y se dividieron los valores en 7 categorías:
+<img width="317" height="243" alt="image" src="https://github.com/user-attachments/assets/59ccd714-4f95-4df0-aba3-e70221d72013" />
+
+- Luego podemos observar los histogramas de las variables cuantitativas:
+<img width="2468" height="1828" alt="image" src="https://github.com/user-attachments/assets/e5ca0f1c-54fc-473b-ad54-9044a870a70e" />
+
+  Podemos observar que todas las variables tienen un comportamiento un poco diferente pero tienen en común que los valores extremos (la calificación más alta y la más baja) son los valores que suelen tener mayores frecuencias absolutas, lo que nos dice que las personas tienden a dar calificaciones en los extremos.
+- En cuanto a los índices de correlación:
+  <img width="942" height="644" alt="image" src="https://github.com/user-attachments/assets/0dd641fd-0993-4edc-9f78-942fbc552dc5" />
+
+  Podemos observar que las variables con mayor correlación con la etiqueta son el puntaje global (overall) y la variable del valor obtenido por el precio pagado. Probablemente estas variables tengan un mayor peso en modelos como árboles de decisión, pero podría no tener tanta relevancia en los pesos de modelos como los Random Forests o XGBoost que dependen de otros factores (por ejemplo: ganancia de información, impureza, etc.).
+
 ## 3. Entrenamiento de los modelos
 1. **Modelo 1**:
 
@@ -80,7 +102,7 @@ Usamos como métrica de rendimiento el accuracy por tratarse de un problema de c
 ### 4.1 Métricas de rendimiento
 1. **Modelo 1**:
 
-2. **Modelo 2 - Red Neuronal**: NUestro modelo de Red Neuronal tuvo un accuracy de 95.6% durante la validación y un accuracy de 96.1% con el conjunto de prueba, lo que indica que el modelo tiene un buen desempeño
+2. **Modelo 2 - Red Neuronal**: Nuestro modelo de Red Neuronal tuvo un accuracy de 95.6% durante la validación y un accuracy de 96.1% con el conjunto de prueba, lo que indica que el modelo tiene un buen desempeño
 
 3. **Modelo 3 - XGBoost**: Nuestro modelo XGBoost tuvo un accuracy de 95.9% durante la validación y un accuracy de 96% con el conjunto de prueba, lo que indica un buen desempeño del modelo.
 
