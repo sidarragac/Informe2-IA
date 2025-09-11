@@ -112,11 +112,11 @@ Usamos como métrica de rendimiento el accuracy por tratarse de un problema de c
 - 2. **Modelo 2 - Red Neuronal**:
 
     **a. Matriz de confusión**:
-    ![Matriz de Confusión](images/matriz_confusion_neuronal.png)
+    ![Matriz de Confusión](Images/matriz_confusion_neuronal.png)
     Como se puede observar, los valores en las predicciones correctas son significativamente altos, lo que confirma que el modelo predice los resultados verdaderos con un alto grado de exactitud. La cantidad de falsos positivos y falsos negativos es muy pequeña en comparación con el total de predicciones acertadas.
 
 - 3. **Modelo 3 - XGBoost**:
 
   **a. Matriz de confusión**:
-  ![Matriz de Confusión](images/matriz_confusion_xgboost.png)
+  ![Matriz de Confusión](Images/matriz_confusion_xgboost.png)
   Se puede observar que el modelo predice muy bien los valores verdaderos. La cantidad de falsos positivos y falsos negativos es muy pequeño en proporción a la cantidad de resultados acertados.
