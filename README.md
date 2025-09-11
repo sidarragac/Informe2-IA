@@ -45,9 +45,27 @@ Para el preprocesamiento del dataset se realizaron los siguientes pasos:
 ## 3. Entrenamiento de los modelos
 1. **Modelo 1**:
 
-2. **Modelo 2 - Red Neuronal**:
+2. **Modelo 2 - Red Neuronal**: Para el entrenamiento del modelo de red neuronal, se utilizó una arquitectura de red neuronal secuencial con Keras y TensorFlow. La configuración y los parámetros elegidos fueron los siguientes:
 
-3. **Modelo 3 - XGBoost**: el tercer modelo utilizado fue el XGBoost, en el cual se entrenan varios árboles de decisión pero cada árbol aprende del anterior y trata de corregir los errores de los árboles pasados. Suele ser más preciso que un Random Forest. En este caso usamos la librería xgboost para usar el modelo. Los hiperparámetros fueron los siguientes:
+**Arquitectura del modelo:**
+
+- Capas de entrada y ocultas: Una capa de entrada con 64 neuronas y función de activación ReLU para decidir si se activan o no cada una. Una segunda capa oculta con 32 neuronas. Se añadió una capa de Dropout del 50% para regularizar el modelo y evitar el sobreajuste apagando aleatoriamente neuronas y así obligar al modelo a buscar nuevos caminos en cada iteración.
+
+- Capa de salida: Una sola neurona con función de activación Sigmoide para devolver respuestas de 0 o 1.
+
+**Hiperparámetros de entrenamiento:**
+
+- Optimizador: Adam, este tipo de optimizador es muy adecuado para problemas con gradientes ruidosos con muchas características y ajustar los pasos del aprendizaje.
+
+- Función de pérdida: binary_crossentropy, que mide la diferencia entre las predicciones del modelo y las etiquetas verdaderas y en este caso para respuestas binarias.
+
+- Métricas: La precisión (accuracy) se utilizó para monitorear el rendimiento y ver si el modelo está aprendiendo en cada época.
+
+- Épocas: 30, para darle al modelo suficientes oportunidades para aprender.
+
+- Tamaño del lote (batch_size): 32, numero intermedio para que el modelo no pierda la capacidad de generalizar las respuestas (aprenda los patrones en las reseñas de aerolíneas y no memorizar).
+
+1. **Modelo 3 - XGBoost**: El tercer modelo utilizado fue el XGBoost, en el cual se entrenan varios árboles de decisión pero cada árbol aprende del anterior y trata de corregir los errores de los árboles pasados. Suele ser más preciso que un Random Forest. En este caso usamos la librería xgboost para usar el modelo. Los hiperparámetros fueron los siguientes:
     - *n_estimators*: es el número de árboles que vamos a usar. En este caso usamos 100.
     - *learning_rate*: es la tasa de aprendizaje. Es lo que contribuye cada árbol al resultado final y esto determina qué tan rápido aprende el modelo. Entre más pequeños sea este valor, significa que cada árbol corregirá menos errores del árbol anterior. Los valores usuales son entre 0.05 y 0.3. En nuestro caso usamos 0.1.
     - *max_depth*: es la profundidad máxima de cada árbol. En nuestro modelo está configurada en una profundidad máxima de 6.
@@ -58,20 +76,25 @@ Para el preprocesamiento del dataset se realizaron los siguientes pasos:
     - *eval_metric*: es la métrica que usa el modelo para evaluar su desempeño durante el entrenamiento. En este caso se usa 'logloss' que significa logarithmic loss y es una métrica utilizada para ver qué tan bien predice el modelo las probabilidades en un problema de clasificación.
 
 ## 4. Evaluación de resultados:
+Usamos como métrica de rendimiento el accuracy por tratarse de un problema de clasificación. Una clasificación cercana al 100% indica una mejor clasificación. Basado en los resultados del accuracy con el conjunto de datos de validación y de prueba, podemos establecer el desempeño del modelo usado y por ende, predecir si se recomienda o no una aerolinea.
 ### 4.1 Métricas de rendimiento
 1. **Modelo 1**:
 
-2. **Modelo 2 - Red Neuronal**:
+2. **Modelo 2 - Red Neuronal**: NUestro modelo de Red Neuronal tuvo un accuracy de 95.6% durante la validación y un accuracy de 96.1% con el conjunto de prueba, lo que indica que el modelo tiene un buen desempeño
 
-3. **Modelo 3 - XGBoost**: Usamos como métrica de rendimiento el accuracy por tratarse de un problema de clasificación. Entre más cercano esté el accuracy al 100% significa que la clasificación es mejor. Nuestro modelo XGBoost tuvo un accuracy de 95.9% durante la validación y un accuracy de 96% con el conjunto de prueba, lo que indica un buen desempeño del modelo. Basados en este resultado de precisión podemos decir que el modelo realiza una clasificación adecuada y permite predecir si se recomienda o no una aerolínea.
+3. **Modelo 3 - XGBoost**: Nuestro modelo XGBoost tuvo un accuracy de 95.9% durante la validación y un accuracy de 96% con el conjunto de prueba, lo que indica un buen desempeño del modelo.
 
 ### 4.2 Curvas y Visualizaciones
-1. **Modelo 1**:
+- 1. **Modelo 1**:
 
-2. **Modelo 2 - Red Neuronal**:
+- 2. **Modelo 2 - Red Neuronal**:
 
-3. **Modelo 3 - XGBoost**:
+    **a. Matriz de confusión**:
+    ![Matriz de Confusión](images/matriz_confusion_neuronal.png)
+    Como se puede observar, los valores en las predicciones correctas son significativamente altos, lo que confirma que el modelo predice los resultados verdaderos con un alto grado de exactitud. La cantidad de falsos positivos y falsos negativos es muy pequeña en comparación con el total de predicciones acertadas.
+
+- 3. **Modelo 3 - XGBoost**:
 
   **a. Matriz de confusión**:
-  ![Matriz de Confusión](Images/matriz_confusion_xgboost.png)
+  ![Matriz de Confusión](images/matriz_confusion_xgboost.png)
   Se puede observar que el modelo predice muy bien los valores verdaderos. La cantidad de falsos positivos y falsos negativos es muy pequeño en proporción a la cantidad de resultados acertados.
