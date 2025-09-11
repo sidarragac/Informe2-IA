@@ -8,7 +8,7 @@ from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder, StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
-from Includes.generacion_graficas import grafica_correlacion, boxplots_vs_target
+from Includes.generacion_graficas import graficar_histograma, grafica_correlacion, boxplots_vs_target
 
 
 def preprocesar_dataset():
@@ -25,6 +25,9 @@ def preprocesar_dataset():
 
     # Se revisa información de las variables: tipo de dato que contienen y cuántos registros no nulos contienen
     mostrar_info_variables(df_sin_vacios)
+
+    # Histograma de las variables
+    graficar_histograma(df_sin_vacios)
 
     # Se eliminan las columnas que no se consideran de interés para el modelo
     data_elegida = df_sin_vacios.drop(columns=['author', 'review_date', 'customer_review', 'route', 'date_flown'])

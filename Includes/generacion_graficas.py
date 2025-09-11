@@ -4,6 +4,9 @@ from sklearn.metrics import ConfusionMatrixDisplay
 
 IMAGES_DIR = "../Images/"
 
+def graficar_histograma(df):
+    df.hist(bins=50, figsize=(20, 15))
+
 def graficar_resultados(y_test, y_pred, method_name):
     # Matriz de confusión
     ConfusionMatrixDisplay.from_predictions(y_test, y_pred, cmap="Blues")
