@@ -134,56 +134,53 @@ Usamos como métrica de rendimiento el accuracy por tratarse de un problema de c
 
 1. **Modelo 1 - Maquina de Soporte Vectorial (SVC)**:
    - *Ventajas en este dataset*:  
-     - Captura bien relaciones entre calificaciones numéricas (1–5), que son datos de baja dimensionalidad.  
+     - Captura bien las relaciones entre calificaciones numéricas (que van de 1 a 5), ya que son datos de baja dimensionalidad.  
 
    - *Desventajas en este dataset*:  
-     - El dataset tiene *más de 65 mil filas*, lo que hace que SVC consuma bastante tiempo y memoria en el entrenamiento.  
-     - Manejar muchas variables categóricas (ej. aerolínea, ruta) requiere codificación `One-Hot Encoding`, que aumenta la dimensionalidad y complica aún más el entrenamiento.  
-     - Difícil interpretar qué características llevan a la recomendación o no.  
+     - El dataset tiene más de 65 mil filas, lo que hace que SVC se demore bastante tiempo y consuma mucha memoria en el entrenamiento.  
+     - Manejar muchas variables categóricas (como por ejemplo aerolínea o tipo de aeronave) requiere usar `One-Hot Encoding`, que aumenta la dimensionalidad del dataset y complica aún más el entrenamiento.  
+     - Es difícil interpretar qué características llevan a la recomendación o no.  
 
    - *Escenarios de aplicación*:  
-     - Dataset de tamaño mediano (no tan grande como este) o cuando se prioriza robustez en clasificación con texto.  
-     - Modelos experimentales para comparar contra otros más escalables.  
+     - Dataset de tamaños pequeños a medianos (no tan grande como este) o cuando se quiere prioriza la robustez en clasificación con texto.
+     - Se puede usar en modelos experimentales para comparar con otros modelos que puedan ser más escalables.
 
 ---
 
 2. **Modelo 2 - Red Neuronal**:
    - *Ventajas en este dataset*:  
-     - Se adapta bien a la heterogeneidad del dataset (numéricos, categóricos y texto).  
-     - Puede modelar interacciones complejas entre las calificaciones de servicio y el texto de la reseña.  
-     - Escalable: con GPUs puede entrenar eficientemente aunque el dataset tenga decenas de miles de registros.  
+     - Se adapta bien a la heterogeneidad del dataset (porque hay datos numéricos y categóricos).  
+     - Puede modelar interacciones complejas entre las calificaciones de servicio y las variables categóricas codificadas.  
+     - Escalable: puede procesar un gran volumen de datos en caso de que el dataset crezca mucho al recopilar más datos.  
 
    - *Desventajas en este dataset*:  
-     - Mayor costo computacional: entrenar con 65k reseñas de texto requiere más tiempo y recursos.  
-     - Ajustar hiperparámetros (número de capas, neuronas, tasa de aprendizaje) es más difícil que en modelos basados en árboles.  
-     - Interpretabilidad limitada: cuesta explicar por qué un cliente es clasificado como “recomienda” o “no recomienda”.  
+     - Mayor costo computacional: entrenar con 65 mil registros requiere más tiempo y recursos, que también está atado al número de épocas que se usen.  
+     - Ajustar hiperparámetros (por ejmplo el número de capas, las neuronas o la tasa de aprendizaje) es más difícil que en modelos basados en árboles.  
 
    - *Escenarios de aplicación*:  
-     - Cuando se quiere aprovechar al máximo el texto de las reseñas (ej. embeddings).  
+     - Podría ser muy útil si quisieramos usar la variable del texto de las reseñas (por ejemplo usando embeddings), que en este caso fue omitida, pero podría mejorar el rendimiento del modelo.  
      - Problemas donde la complejidad del lenguaje del cliente aporta un peso significativo a la predicción.  
 
 ---
 
 3. **Modelo 3 - XGBoost**:
    - *Ventajas en este dataset*:  
-     - Excelente con *variables tabulares* (calificaciones, tipo de viajero, cabina, aerolínea).  
-     - Maneja bien datos faltantes, frecuentes en variables de servicio o fechas incompletas.  
-     - Entrena rápido y escala muy bien con las 65 mil reseñas.  
-     - Permite interpretabilidad: importancia de variables muestra qué factores (comodidad, comida, servicio en cabina, etc.) son más relevantes en la recomendación.  
+     - Es muy buen modelo cuando se trabaja con variables tabulares (por ejemplo calificaciones, tipo de viajero, cabina, aerolínea).  
+     - Entrena rápido y escala muy bien con los 65 mil registros.  
+     - Permite determinar la importancia de las variables. Muestra qué factores (comodidad, comida, servicio en cabina, etc.) son más relevantes en la recomendación.  
 
-   - *Desventajas en este dataset*:  
-     - Menos efectivo si solo se le da el texto sin procesar. Requiere transformar el texto en features numéricas (embeddings).  
+   - *Desventajas en este dataset*:
      - Más propenso a overfitting si no se ajustan bien hiperparámetros (profundidad, tasa de aprendizaje).  
 
    - *Escenarios de aplicación*:  
-     - Modelos de negocio que necesitan un balance entre *precisión, rapidez y explicabilidad*.  
-     - Tablas grandes con mezcla de numéricos y categóricos, como este dataset.  
+     - Modelos de negocio que necesitan un balance entre precisión, rapidez y explicabilidad.  
+     - Tablas grandes con mezcla de datos numéricos y categóricos, como este dataset.  
      - Casos donde interesa explicar qué aspectos del servicio influyen en la recomendación.  
 
 ## 6. Conclusiones:
 
-Con respecto al proyecto, se ha aprendido en gran medida sobre los diferentes modelos de aprendizaje supervisado. Estos, al utilizarse en el dataset preprocesado, presentaron resultados satisfactorios que nos permitieron clasificar adecuadamente la etiqueta con niveles de *accuracy* muy altos.  
+Con respecto al proyecto, se ha aprendido en gran medida sobre los diferentes modelos de aprendizaje supervisado. Estos, al utilizarse en el dataset preprocesado, presentaron resultados satisfactorios que nos permitieron clasificar adecuadamente la etiqueta con niveles de accuracy muy altos.  
 
-Así, el mejor modelo en este caso es XGBoost, no solo por la precisión sino también por la cantidad de recursos computacionales usados. Aunque la Red Neuronal obtuvo un *0.1%* más de acierto, la diferencia no es estadísticamente significativa y el costo computacional de entrenar/rediseñar la red no se justifica.  
+Así, el mejor modelo en este caso es XGBoost, no solo por la precisión sino también por la cantidad de recursos computacionales usados. Aunque la Red Neuronal obtuvo un 0.1% más de acierto, la diferencia no es estadísticamente significativa y el costo computacional de entrenar/rediseñar la red no se justifica.  
 
 Además, a comparación de un Random Forest, por ejemplo, cuyo entrenamiento se basa en árboles paralelos, el enfoque secuencial de XGBoost permite obtener mejores resultados al corregir errores de árboles previos.
