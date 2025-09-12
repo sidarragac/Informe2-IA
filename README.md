@@ -71,6 +71,8 @@ Durante el preprocesamiento se logra observar lo siguiente:
    - *gamma*: Controla cuánto influye un único punto en la forma de la frontera. Al usar un kernel lineal, gamma no tiene ningún efecto. Pero se envía un parámetro para respetar la consistencia de la API de sklearn.
    - *random_state*: la semilla para generar números aleatorios y que el resultado sea reproducible.
 
+---
+
 2. **Modelo 2 - Red Neuronal**: Para el entrenamiento del modelo de red neuronal, se utilizó una arquitectura de red neuronal secuencial con `Keras` y `TensorFlow`. La configuración y los parámetros elegidos fueron los siguientes:
    - **Arquitectura del modelo:**
        - *Capas de entrada y ocultas*: Una capa de entrada con 64 neuronas y función de activación ReLU para decidir si se activan o no cada una. Una segunda capa oculta con 32 neuronas. Se añadió una capa de Dropout del 50% para regularizar el modelo y evitar el sobreajuste apagando aleatoriamente neuronas y así obligar al modelo a buscar nuevos caminos en cada iteración.
@@ -81,6 +83,8 @@ Durante el preprocesamiento se logra observar lo siguiente:
       - *Métricas*: La precisión (accuracy) se utilizó para monitorear el rendimiento y ver si el modelo está aprendiendo en cada época.
       - *Épocas*: 30, para darle al modelo suficientes oportunidades para aprender.
       - *Tamaño del lote (batch_size)*: 32, numero intermedio para que el modelo no pierda la capacidad de generalizar las respuestas (aprenda los patrones en las reseñas de aerolíneas y no memorizar).
+
+---
 
 3. **Modelo 3 - XGBoost**: El tercer modelo utilizado fue el `XGBoost`, en el cual se entrenan varios árboles de decisión pero cada árbol aprende del anterior y trata de corregir los errores de los árboles pasados. Suele ser más preciso que un Random Forest. En este caso usamos la librería xgboost para usar el modelo. Los hiperparámetros fueron los siguientes:
     - *n_estimators*: es el número de árboles que vamos a usar. En este caso usamos 100.
@@ -107,12 +111,74 @@ Usamos como métrica de rendimiento el accuracy por tratarse de un problema de c
     ![Matriz de Confusión](Images/matriz_confusion_svc.png)
     Se puede observar que el modelo logra un nivel de exactitud muy alto. La cantidad de falsos positivos y falsos negativos es muy pequeño en proporción a la cantidad de resultados acertados, lo que indica un buen entrenamiento.
 
+---
+
 2. **Modelo 2 - Red Neuronal**:
    - **Matriz de confusión**:
     ![Matriz de Confusión](Images/matriz_confusion_neuronal.png)
     Como se puede observar, los valores en las predicciones correctas son significativamente altos, lo que confirma que el modelo predice los resultados verdaderos con un alto grado de exactitud. La cantidad de falsos positivos y falsos negativos es muy pequeña en comparación con el total de predicciones acertadas.
 
+---    
+
 3. **Modelo 3 - XGBoost**:
    - **Matriz de confusión**:
      ![Matriz de Confusión](Images/matriz_confusion_xgboost.png)
      Se puede observar que el modelo predice muy bien los valores verdaderos. La cantidad de falsos positivos y falsos negativos es muy pequeño en proporción a la cantidad de resultados acertados.
+
+## 5. Análisis comparativo:
+
+1. **Modelo 1 - Maquina de Soporte Vectorial (SVC)**:
+   - *Ventajas en este dataset*:  
+     - Captura bien relaciones entre calificaciones numéricas (1–5), que son datos de baja dimensionalidad.  
+
+   - *Desventajas en este dataset*:  
+     - El dataset tiene *más de 65 mil filas*, lo que hace que SVC consuma bastante tiempo y memoria en el entrenamiento.  
+     - Manejar muchas variables categóricas (ej. aerolínea, ruta) requiere codificación `One-Hot Encoding`, que aumenta la dimensionalidad y complica aún más el entrenamiento.  
+     - Difícil interpretar qué características llevan a la recomendación o no.  
+
+   - *Escenarios de aplicación*:  
+     - Dataset de tamaño mediano (no tan grande como este) o cuando se prioriza robustez en clasificación con texto.  
+     - Modelos experimentales para comparar contra otros más escalables.  
+
+---
+
+2. **Modelo 2 - Red Neuronal**:
+   - *Ventajas en este dataset*:  
+     - Se adapta bien a la heterogeneidad del dataset (numéricos, categóricos y texto).  
+     - Puede modelar interacciones complejas entre las calificaciones de servicio y el texto de la reseña.  
+     - Escalable: con GPUs puede entrenar eficientemente aunque el dataset tenga decenas de miles de registros.  
+
+   - *Desventajas en este dataset*:  
+     - Mayor costo computacional: entrenar con 65k reseñas de texto requiere más tiempo y recursos.  
+     - Ajustar hiperparámetros (número de capas, neuronas, tasa de aprendizaje) es más difícil que en modelos basados en árboles.  
+     - Interpretabilidad limitada: cuesta explicar por qué un cliente es clasificado como “recomienda” o “no recomienda”.  
+
+   - *Escenarios de aplicación*:  
+     - Cuando se quiere aprovechar al máximo el texto de las reseñas (ej. embeddings).  
+     - Problemas donde la complejidad del lenguaje del cliente aporta un peso significativo a la predicción.  
+
+---
+
+3. **Modelo 3 - XGBoost**:
+   - *Ventajas en este dataset*:  
+     - Excelente con *variables tabulares* (calificaciones, tipo de viajero, cabina, aerolínea).  
+     - Maneja bien datos faltantes, frecuentes en variables de servicio o fechas incompletas.  
+     - Entrena rápido y escala muy bien con las 65 mil reseñas.  
+     - Permite interpretabilidad: importancia de variables muestra qué factores (comodidad, comida, servicio en cabina, etc.) son más relevantes en la recomendación.  
+
+   - *Desventajas en este dataset*:  
+     - Menos efectivo si solo se le da el texto sin procesar. Requiere transformar el texto en features numéricas (embeddings).  
+     - Más propenso a overfitting si no se ajustan bien hiperparámetros (profundidad, tasa de aprendizaje).  
+
+   - *Escenarios de aplicación*:  
+     - Modelos de negocio que necesitan un balance entre *precisión, rapidez y explicabilidad*.  
+     - Tablas grandes con mezcla de numéricos y categóricos, como este dataset.  
+     - Casos donde interesa explicar qué aspectos del servicio influyen en la recomendación.  
+
+## 6. Conclusiones:
+
+Con respecto al proyecto, se ha aprendido en gran medida sobre los diferentes modelos de aprendizaje supervisado. Estos, al utilizarse en el dataset preprocesado, presentaron resultados satisfactorios que nos permitieron clasificar adecuadamente la etiqueta con niveles de *accuracy* muy altos.  
+
+Así, el mejor modelo en este caso es XGBoost, no solo por la precisión sino también por la cantidad de recursos computacionales usados. Aunque la Red Neuronal obtuvo un *0.1%* más de acierto, la diferencia no es estadísticamente significativa y el costo computacional de entrenar/rediseñar la red no se justifica.  
+
+Además, a comparación de un Random Forest, por ejemplo, cuyo entrenamiento se basa en árboles paralelos, el enfoque secuencial de XGBoost permite obtener mejores resultados al corregir errores de árboles previos.
