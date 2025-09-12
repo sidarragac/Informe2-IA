@@ -132,55 +132,28 @@ Usamos como métrica de rendimiento el accuracy por tratarse de un problema de c
 
 ## 5. Análisis comparativo:
 
-1. **Modelo 1 - Maquina de Soporte Vectorial (SVC)**:
-   - *Ventajas en este dataset*:  
-     - Captura bien las relaciones entre calificaciones numéricas (que van de 1 a 5), ya que son datos de baja dimensionalidad.  
+En esta actividad se evaluaron tres modelos de aprendizaje supervisado: una máquina de soporte vectorial, una red neuronal y un modelo de árboles de decisión optimizados (XGBoost).
 
-   - *Desventajas en este dataset*:  
-     - El dataset tiene más de 65 mil filas, lo que hace que SVC se demore bastante tiempo y consuma mucha memoria en el entrenamiento.  
-     - Manejar muchas variables categóricas (como por ejemplo aerolínea o tipo de aeronave) requiere usar `One-Hot Encoding`, que aumenta la dimensionalidad del dataset y complica aún más el entrenamiento.  
-     - Es difícil interpretar qué características llevan a la recomendación o no.  
+En cuanto al desempeño, todos los modelos mostraron una alta precisión durante las fases de validación y prueba. El SVC alcanzó una precisión de 94.4% en la validación y 95% en la prueba. La red neuronal obtuvo una precisión ligeramente superior con 95.6% en la validación y 96.1% en la prueba. El XGBoost alcanzó 95.9% en validación y 96% en la prueba. Podemos observar que el desempeño de los tres modelos es muy bueno y muy similar, cada uno con un accuracy mayor o igual al 94%.
 
-   - *Escenarios de aplicación*:  
-     - Dataset de tamaños pequeños a medianos (no tan grande como este) o cuando se quiere prioriza la robustez en clasificación con texto.
-     - Se puede usar en modelos experimentales para comparar con otros modelos que puedan ser más escalables.
+El SVC tiene como principal ventaja su capacidad para trabajar bien en datasets con muchas variables (atributos) y puede lograr buenas separaciones cuando la relación de los datos tiende a ser lineal. Como desventaja, este modelo no escala bien a conjuntos de datos grandes (como el que se utilizó en nuestro taller que son más de 65 mil registros), además es muy sensible a la elección de hiperparámetros y no tolerar bien datos faltantes o outliers (aunque esta limitación puede ser mitigada con el preprocesamiento de los datos). Adicionalmente, su interpretabilidad es baja, entendiendose la interpretabilidad como la facilidad que tendría una persona para entender por qué el modelo toma las decisiones que toma.
 
----
+La red neuronal ofrece una gran capacidad para aprender relaciones complejas entre las variables (es decir, relaciones que no son lineales) y mostró el mejor desempeño en términos de precisión. Sin embargo, como desventaja, su entrenamiento suele ser más lento (que también depende del número de épocas usadas), requiere muchos ajustes de hiperparámetros, y puede haber overfitting si no se realiza adecuadamente el ajuste de estos hiperparámetros. Además, es un modelo que funciona como caja negra, lo que hace que su interpretabilidad también sea baja como la del SVC. Esto puede limitar su uso en contextos donde se necesita entender o justificar el comportamiento del modelo.
 
-2. **Modelo 2 - Red Neuronal**:
-   - *Ventajas en este dataset*:  
-     - Se adapta bien a la heterogeneidad del dataset (porque hay datos numéricos y categóricos).  
-     - Puede modelar interacciones complejas entre las calificaciones de servicio y las variables categóricas codificadas.  
-     - Escalable: puede procesar un gran volumen de datos en caso de que el dataset crezca mucho al recopilar más datos.  
+El XGBoost ofrece un buen balance entre precisión, velocidad de entrenamiento y capacidad de interpretación. Tolera bien datos faltantes y valores extremos (outliers). Puede generalizar bien incluso con datos ruidosos, es decir, datos erróneos o inconsistentes (que en nuestro caso pudo haber sido la variable aircraft). Como ventaja adicional, permite obtener información sobre la importancia de las variables en la predicción (osea, cuales variables son más relevantes y contribuyen más al proceso de predicción). Aunque requiere un proceso de ajuste de parámetros, es más eficiente y práctico que una red neuronal y más interpretable que un SVC. A pesar de lo anterior, como desventaja tenemos que puede ser propenso a overfitting y no funciona bien con datos no tabulares (cosa que sí hace mejor una red neuronal por ejemplo).
 
-   - *Desventajas en este dataset*:  
-     - Mayor costo computacional: entrenar con 65 mil registros requiere más tiempo y recursos, que también está atado al número de épocas que se usen.  
-     - Ajustar hiperparámetros (por ejmplo el número de capas, las neuronas o la tasa de aprendizaje) es más difícil que en modelos basados en árboles.  
+Sintetizando: aunque los tres modelos se desempeñaron bien, el XGBoost podría representar la mejor alternativa en términos generales, si tenemos en cuenta no solo el desempeño sino también el uso de recursos y la interpretabilidad del modelo. La red neuronal podría ser preferida en escenarios donde se prioriza el rendimiento sin importar la interpretabilidad, mientras que el SVC puede ser útil en conjuntos de datos más pequeños y bien estructurados, lo que permitiría hacer clasificaciones muy precisas.
 
-   - *Escenarios de aplicación*:  
-     - Podría ser muy útil si quisieramos usar la variable del texto de las reseñas (por ejemplo usando embeddings), que en este caso fue omitida, pero podría mejorar el rendimiento del modelo.  
-     - Problemas donde la complejidad del lenguaje del cliente aporta un peso significativo a la predicción.  
-
----
-
-3. **Modelo 3 - XGBoost**:
-   - *Ventajas en este dataset*:  
-     - Es muy buen modelo cuando se trabaja con variables tabulares (por ejemplo calificaciones, tipo de viajero, cabina, aerolínea).  
-     - Entrena rápido y escala muy bien con los 65 mil registros.  
-     - Permite determinar la importancia de las variables. Muestra qué factores (comodidad, comida, servicio en cabina, etc.) son más relevantes en la recomendación.  
-
-   - *Desventajas en este dataset*:
-     - Más propenso a overfitting si no se ajustan bien hiperparámetros (profundidad, tasa de aprendizaje).  
-
-   - *Escenarios de aplicación*:  
-     - Modelos de negocio que necesitan un balance entre precisión, rapidez y explicabilidad.  
-     - Tablas grandes con mezcla de datos numéricos y categóricos, como este dataset.  
-     - Casos donde interesa explicar qué aspectos del servicio influyen en la recomendación.  
+En cuanto a los posibles escenarios de aplicación:
+- El SVC es mejor en conjunto de datos pequeños, que estén bien estructurados y que tengan pocos datos faltantes. Puede hacer clasificaciones muy precisas si las divisiones de lo que se busca clasificar están bien definidas y separadas entre sí. Se suele utilizar en situaciones donde se requiera una predicción muy precisa.
+- Las redes neuronales son muy útiles para trabajar con grandes volúmenes de datos y cuando las variables tienen relaciones complejas entre sí, incluyendo relaciones no lineales. Tienen muy buen desempeño para casos de uso de predicción.
+- El XGBoost es más versátil y puede aplicarse a problemas cuyos datos sean tabulares. Tiene capacidad para manejar datos faltantes (aunque en este escenario se debe hacer la imputación de estos datos) y mantener un buen desempeño. Puede ser útil en muchos sistemas de producción en general para distintos usos en empresas que suelen tener datos que pueden ser tabulados.
 
 ## 6. Conclusiones:
+Con respecto al proyecto, logramos aprender más sobre algunos modelos de aprendizaje supervisado, cómo implementarlos y comparar el desempeño entre ellos. Adicionalmente es valioso todo el aprendizaje en cuanto al preprocesamiento de datos, que es el paso más crítico para obtener un buen entrenamiento y que el modelo sea eficiente. Nuestro modelos, al utilizarse en el dataset preprocesado, presentaron resultados satisfactorios que nos permitieron clasificar adecuadamente la etiqueta con niveles de accuracy muy altos.  
 
-Con respecto al proyecto, se ha aprendido en gran medida sobre los diferentes modelos de aprendizaje supervisado. Estos, al utilizarse en el dataset preprocesado, presentaron resultados satisfactorios que nos permitieron clasificar adecuadamente la etiqueta con niveles de accuracy muy altos.  
+Analizando la información del punto anterior (análisis comparativo), determinamos que poniendo todos los factores en una balanza, para este dataset el mejor modelo podría ser XGBoost, no solo porque nos ofreció un desempeño muy alto (básicamente igual al de la red neuronal), también es menos costoso computacionalmente y no funciona como una caja negra a diferencia de la red neuronal. Aunque la Red Neuronal obtuvo un 0.1% más de accuracy, la diferencia es insignificativa para un costo computacional mucho mayor que exige la RN.
 
-Así, el mejor modelo en este caso es XGBoost, no solo por la precisión sino también por la cantidad de recursos computacionales usados. Aunque la Red Neuronal obtuvo un 0.1% más de acierto, la diferencia no es estadísticamente significativa y el costo computacional de entrenar/rediseñar la red no se justifica.  
+Adicionalmente, nuestro dataset era grande, con más de 65 mil registros, por lo que el SVC puede perder poder en estos casos, al ser más eficiente en datasets pequeños.
 
-Además, a comparación de un Random Forest, por ejemplo, cuyo entrenamiento se basa en árboles paralelos, el enfoque secuencial de XGBoost permite obtener mejores resultados al corregir errores de árboles previos.
+Finalmente, a comparación de otros modelos como un Random Forest (cuyo entrenamiento se basa en árboles paralelos), el enfoque de entrenamiento secuencial de XGBoost (los árboles se entrenan secuencialmente y no en paralelo) permite obtener mejores resultados al corregir errores de árboles previos.
