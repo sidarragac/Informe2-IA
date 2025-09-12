@@ -1,5 +1,10 @@
 # Informe2-IA
-Informe 2 correspondiente a la materia Inteligencia Artificial (SI3003) de la Universidad EAFIT
+Informe 2 correspondiente a la materia Inteligencia Artificial (SI3003) de la Universidad EAFIT.
+
+Desarrollado por:
+- Santiago Idárraga Ceballos
+- Juan Carlos Citelly Guzmán
+- Mateo Pineda Álvarez 
 
 ## 1. Descripción del dataset
 - **Fuente**: este dataset proporciona información acerca de algunas aerolíneas y las calificaciones que los usuarios le dan a varios aspectos del viaje (como la comodidad de las sillas, el servicio, el entretenimiento, etc.). El dataset fue sacado de la plataforma Kaggle y se puede acceder a través del siguiente [enlace](https://www.kaggle.com/datasets/efehandanisman/skytrax-airline-reviews?resource=download)
